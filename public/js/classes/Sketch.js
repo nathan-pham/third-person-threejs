@@ -19,7 +19,7 @@ export default class Sketch {
             this.createControls(controls)
         }
 
-        this.loadAssets(preload, onLoad)
+        this.loadAssets(preload.flat(Infinity), onLoad)
         window.addEventListener("resize", this.resize.bind(this))
     }
 
@@ -27,27 +27,30 @@ export default class Sketch {
         let assets = []
 
         const loaders = {
-            "fbx": FBXLoader
+            "fbx": FBXLoader,
+            "png": THREE.TextureLoader
         }
 
         for(const asset of preload) {
-            const type = asset.split(".").pop()
+            const extension = asset.split(".").pop()
             const name = asset.split("/").pop()
-            const loader = new loaders[type]
+            const loader = new loaders[extension]
 
             const promise = new Promise(resolve => {
                 loader.load(asset, object => {
-                    object.mixer = new THREE.AnimationMixer(object)
-                    object.name = name
-
-                    object.traverse(child => {
-                        if(child.isMesh) {
-                            child.receiveShadow = false
-                            child.castShadow = true
-
-                            child.material.map = null
-                        }
-                    }) 
+                    if(extension == "fbx") {
+                        object.mixer = new THREE.AnimationMixer(object)
+                        object.name = name
+    
+                        object.traverse(child => {
+                            if(child.isMesh) {
+                                child.receiveShadow = false
+                                child.castShadow = true
+    
+                                child.material.map = null
+                            }
+                        })
+                    }
 
                     resolve(object)
                 })

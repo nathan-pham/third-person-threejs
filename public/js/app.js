@@ -15,9 +15,12 @@ const sketch = new Sketch({
     container: "#webgl__container", 
     controls: "orbit",
     
-    preload: utils.prefixFBX("people/FireFighter"),
+    preload: [
+        utils.prefixFBX("people/FireFighter"),
+        utils.prefixPNG("SimplePeople_FireFighter_Black")
+    ],
     onLoad: (assets) => {
-        sketch.add(new Player(assets["FireFighter.fbx"]))
+        sketch.add(new Player(assets))
         sketch.render()
     }
 })
