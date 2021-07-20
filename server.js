@@ -1,15 +1,18 @@
+const {Server} = require("socket.io")
+const express = require("express")
+
 const http = require("http")
 
-const hostname = "127.0.0.1"
-const port = 3000
+const app = express()
+const server = http.createServer(app)
+const io = new Server(server)
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200
-    res.setHeader("Content-Type", "text/plain")
-    res.end("hello world")
+const port = 8080
+
+app.get('/', (req, res) => {
+    res.send("Hello World")
 })
 
-
-server.listen(port, hostname, () => {
-    console.log(`server started at http://${hostname}:${port}`)
+server.listen(port, () => {
+    console.log(`server started on http://localhost:${port}`)
 })
