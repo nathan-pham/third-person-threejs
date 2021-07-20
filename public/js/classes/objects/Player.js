@@ -25,6 +25,7 @@ export default class Player {
 
             const action = this.mixer.clipAction(this.animations[name]) 
             this.currentAnimation = name
+            this.animationTime = Date.now()
 
             if(previous !== action && previous) {
                 previous.fadeOut(0.2)
@@ -56,11 +57,29 @@ export default class Player {
         return asset
     }
 
+    /*
+    movePlayer(dt){	
+        if (this.player.move.forward>0){
+            const speed = (this.player.action=='Running') ? 400 : 150;
+            this.player.object.translateZ(dt*speed);
+        }else{
+            this.player.object.translateZ(-dt*30);
+        }
+        this.player.object.rotateY(this.player.move.turn*dt);
+	}
+    */
+
     update(sketch) {
-        // manage animations
         let [forward, turn] = sketch.controls.state
         turn *= -1
-        if(forward > 0.3) {
+
+        // manage animations
+        if(this.currentAnimation == "walking" || this.currentAnimation == "running" && forward > 0) {
+            const elapsed = Date.now() - this.animationTime
+            if(elapsed > 1000) {
+                this.action = "running"
+            }
+        } else if(forward > 0.3 && this.currentAnimation !== "running") {
             this.action = "walking"
         } else if(forward < -0.3) {
             this.action = "walking_backwards"
@@ -70,11 +89,15 @@ export default class Player {
             this.action = "idle"
         }
 
+        // running animation
+        
+
+
         // manage camera
         if(sketch.activeCamera) {
             sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
             const position = this.object.position.clone()
-            position. y += 200
+            position.y += 200
             sketch.camera.lookAt(position)
         }
     }

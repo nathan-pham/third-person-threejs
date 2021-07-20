@@ -5,6 +5,7 @@ import * as THREE from "https://esm.sh/three"
 import Joystick from "./Joystick.js"
 
 export default class Sketch {
+    delta = 0
     assets = {}
     objects = []
     clock = new THREE.Clock()
@@ -154,7 +155,7 @@ export default class Sketch {
     }
 
     render() {
-        const delta = this.clock.getDelta()
+        this.delta = this.clock.getDelta()
         this.renderer.render(this.scene, this.camera)
 
         for(const object of this.objects) {
@@ -163,7 +164,7 @@ export default class Sketch {
             }
 
             if(object.mixer) {
-                object.mixer.update(delta)
+                object.mixer.update(this.delta)
             }
         }
 
