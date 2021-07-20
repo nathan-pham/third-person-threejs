@@ -43,6 +43,8 @@ export default class Sketch {
 
     createScene() {
         this.scene = new THREE.Scene()
+        this.scene.background = new THREE.Color(0xa0a0a0)
+        this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000)
     }
 
     createCamera() {
