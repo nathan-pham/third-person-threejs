@@ -46,3 +46,4 @@ for(let x = -5000; x < 5000; x += 1000) {
         sketch.add(new Collider([x, 250, z]))
     }
 }
+sketch.add(new Stage([0, 20, 0]))

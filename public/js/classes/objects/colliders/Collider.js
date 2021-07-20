@@ -1,6 +1,8 @@
 import * as THREE from "https://esm.sh/three"
 
 export default class Collider {
+    type = "collider"
+    
     constructor(position=[]) {
         this.object = this.createCollider(position)
     }

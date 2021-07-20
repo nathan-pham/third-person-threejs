@@ -1,6 +1,8 @@
 import * as THREE from "https://esm.sh/three"
 
 export default class Stage {
+    type = "collider"
+
     constructor(position=[0, 20, 0]) {
         this.object = this.createStage(position)
     }
