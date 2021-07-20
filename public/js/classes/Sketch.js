@@ -3,6 +3,7 @@ import {FBXLoader} from "http://esm.sh/three/examples/jsm/loaders/FBXLoader.js"
 import * as THREE from "https://esm.sh/three"
 
 import Joystick from "./Joystick.js"
+import Player from "./objects/Player.js"
 
 export default class Sketch {
     delta = 0
@@ -142,7 +143,53 @@ export default class Sketch {
     createControls(controls) {
         switch(controls) {
             case "joystick":
-                this.controls = new Joystick({container: this.container})
+                this.controls = new Joystick({
+                    container: this.container,
+                    onMove: (state) => {
+                        if(!this.player) { return }
+
+                        let [forward, turn] = state
+                        turn *= -1
+
+                        if(forward == 0) {
+                            this.player.action = "idle"
+                        } else if(Math.abs(turn) > 0.1) {
+                            this.player.action = "turn"
+                        } else if ((this.player.currentAnimation == "walking" )
+                            && forward > 0) {
+                            const elapsed = Date.now() - this.player.animationTime
+                            if(elapsed > 1000) {
+                                this.player.action = "running"
+                            }
+                        } else if(forward > 0.3 && this.player.currentAnimation !== "running") {
+                            this.player.action = "walking"
+                        } else if(forward < 0.3) {
+                            this.player.action = "walking_backwards"
+                        }
+        //     this.action = "turn"
+        // } else {
+        //     this.action = "idle"
+        // }
+
+        // // move player according to animations
+        // // console.log(this.object.position.z)
+        // // if(forward > 0.3) {
+        // //     const speed = this.currentAnimation == "running" ? 400 : 150
+        // //     this.object.translateZ(sketch.delta * speed)
+        // // } else if(forward < -0.3) {
+        // //     this.object.translateZ(-sketch.delta * 30)
+        // // }
+        // // this.object.rotateY(turn * sketch.delta)
+
+        // // manage camera
+        // if(sketch.activeCamera) {
+        //     sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
+        //     const position = this.object.position.clone()
+        //     position.y += 200
+        //     sketch.camera.lookAt(position)
+        // }
+                    }
+                })
                 break
 
             case "orbit":

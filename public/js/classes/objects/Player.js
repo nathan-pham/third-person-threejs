@@ -57,42 +57,42 @@ export default class Player {
         return asset
     }
 
-    update(sketch) {
-        let [forward, turn] = sketch.controls.state
-        turn *= -1
+    // update(sketch) {
+    //     let [forward, turn] = sketch.controls.state
+    //     turn *= -1
 
-        // manage animations
-        if(this.currentAnimation == "walking" || this.currentAnimation == "running" && forward > 0) {
-            const elapsed = Date.now() - this.animationTime
-            if(elapsed > 1000) {
-                this.action = "running"
-            }
-        } else if(forward > 0.3) {
-            this.action = "walking"
-        } else if(forward < -0.3) {
-            this.action = "walking_backwards"
-        } else if(Math.abs(turn) > 0.1) {
-            this.action = "turn"
-        } else {
-            this.action = "idle"
-        }
+    //     // manage animations
+    //     if(this.currentAnimation == "walking" || this.currentAnimation == "running" && forward > 0) {
+    //         const elapsed = Date.now() - this.animationTime
+    //         if(elapsed > 1000) {
+    //             this.action = "running"
+    //         }
+    //     } else if(forward > 0.3) {
+    //         this.action = "walking"
+    //     } else if(forward < -0.3) {
+    //         this.action = "walking_backwards"
+    //     } else if(Math.abs(turn) > 0.1) {
+    //         this.action = "turn"
+    //     } else {
+    //         this.action = "idle"
+    //     }
 
-        // move player according to animations
-        // console.log(this.object.position.z)
-        // if(forward > 0.3) {
-        //     const speed = this.currentAnimation == "running" ? 400 : 150
-        //     this.object.translateZ(sketch.delta * speed)
-        // } else if(forward < -0.3) {
-        //     this.object.translateZ(-sketch.delta * 30)
-        // }
-        // this.object.rotateY(turn * sketch.delta)
+    //     // move player according to animations
+    //     // console.log(this.object.position.z)
+    //     // if(forward > 0.3) {
+    //     //     const speed = this.currentAnimation == "running" ? 400 : 150
+    //     //     this.object.translateZ(sketch.delta * speed)
+    //     // } else if(forward < -0.3) {
+    //     //     this.object.translateZ(-sketch.delta * 30)
+    //     // }
+    //     // this.object.rotateY(turn * sketch.delta)
 
-        // manage camera
-        if(sketch.activeCamera) {
-            sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
-            const position = this.object.position.clone()
-            position.y += 200
-            sketch.camera.lookAt(position)
-        }
-    }
+    //     // manage camera
+    //     if(sketch.activeCamera) {
+    //         sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
+    //         const position = this.object.position.clone()
+    //         position.y += 200
+    //         sketch.camera.lookAt(position)
+    //     }
+    // }
 }

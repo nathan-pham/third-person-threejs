@@ -28,8 +28,11 @@ const sketch = new Sketch({
         )
     ],
     onLoad: (assets) => {
-        sketch.add(new Player(assets))
+        sketch.player = new Player(assets)
+        sketch.add(sketch.player)
         sketch.render()
+        // sketch.add(new Player(assets))
+        // sketch.render()
     }
 })
 
