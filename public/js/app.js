@@ -16,7 +16,7 @@ const sketch = new Sketch({
     controls: "orbit",
     
     preload: [
-        utils.prefixFBX("people/FireFighter"),
+        utils.prefixFBX("people/FireFighter", "anims/Walking"),
         utils.prefixPNG("SimplePeople_FireFighter_Black")
     ],
     onLoad: (assets) => {

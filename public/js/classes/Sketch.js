@@ -38,7 +38,7 @@ export default class Sketch {
 
             const promise = new Promise(resolve => {
                 loader.load(asset, object => {
-                    if(extension == "fbx") {
+                    if(extension == "fbx" && !asset.includes("anim")) {
                         object.mixer = new THREE.AnimationMixer(object)
                         object.name = name
     
@@ -52,6 +52,8 @@ export default class Sketch {
                         })
                     }
 
+                    console.log("loaded", name)
+                    
                     resolve(object)
                 })
             })
