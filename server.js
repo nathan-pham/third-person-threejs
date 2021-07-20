@@ -6,10 +6,10 @@ const port = 3000
 const server = http.createServer((req, res) => {
     res.statusCode = 200
     res.setHeader("Content-Type", "text/plain")
-    res.end(Date.now())
+    res.end("hello world")
 })
 
 
 server.listen(port, hostname, () => {
-    console.log(`server started at ${hostname}://${port}`)
+    console.log(`server started at http://${hostname}:${port}`)
 })
