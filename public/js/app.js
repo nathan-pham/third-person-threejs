@@ -7,22 +7,25 @@ import Floor from "./classes/objects/floor/Floor.js"
 import Grid from "./classes/objects/floor/Grid.js"
 import Player from "./classes/objects/Player.js"
 
+import * as utils from "./utils.js"
+
 const socket = io()
 
 const sketch = new Sketch({
     container: "#webgl__container", 
     controls: "orbit",
-    preload: [
-
-    ]
+    
+    preload: utils.prefixFBX("people/FireFighter"),
+    onLoad: (assets) => {
+        sketch.add(new Player(assets["FireFighter.fbx"]))
+        sketch.render()
+    }
 })
 
 sketch.add(
     new DirectionalLight(),
     new HemisphereLight(),
-    new AmbientLight(),
+    // new AmbientLight(),
     new Floor(),
     new Grid()
 )
-
-sketch.render()

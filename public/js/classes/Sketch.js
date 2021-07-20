@@ -1,12 +1,13 @@
-import * as THREE from "https://esm.sh/three"
 import {OrbitControls} from "https://esm.sh/three/examples/jsm/controls/OrbitControls"
+import {FBXLoader} from "http://esm.sh/three/examples/jsm/loaders/FBXLoader.js"
+import * as THREE from "https://esm.sh/three"
 
 export default class Sketch {
-    time = 0
+    assets = {}
     objects = []
     clock = new THREE.Clock()
 
-    constructor({container=document.body, controls}={}) {
+    constructor({container=document.body, controls, preload=[], onLoad}={}) {
         this.container = typeof container == "string" ? document.querySelector(container) : container
         this.dimensions = {width: this.container.offsetWidth, height: this.container.offsetHeight}
 
@@ -18,7 +19,54 @@ export default class Sketch {
             this.createControls(controls)
         }
 
+        this.loadAssets(preload, onLoad)
         window.addEventListener("resize", this.resize.bind(this))
+    }
+
+    loadAssets(preload, onLoad) {
+        let assets = []
+
+        const loaders = {
+            "fbx": FBXLoader
+        }
+
+        for(const asset of preload) {
+            const type = asset.split(".").pop()
+            const name = asset.split("/").pop()
+            const loader = new loaders[type]
+
+            const promise = new Promise(resolve => {
+                loader.load(asset, object => {
+                    object.mixer = new THREE.AnimationMixer(object)
+                    object.name = name
+
+                    object.traverse(child => {
+                        if(child.isMesh) {
+                            child.receiveShadow = false
+                            child.castShadow = true
+
+                            child.material.map = null
+                        }
+                    }) 
+
+                    resolve(object)
+                })
+            })
+
+            assets.push({path: asset, promise})
+        }
+
+        return Promise.all(assets).then(async () => {
+            for(const asset of assets) {
+                const {path, promise} = asset
+                const name = path.split("/").pop()
+                this.assets[name] = await promise
+            }
+
+            if(typeof onLoad == "function") {
+                onLoad(this.assets)
+            }
+        })
     }
 
     get aspect() {
@@ -49,7 +97,7 @@ export default class Sketch {
 
     createCamera() {
         const fov = 45
-        const near = 45
+        const near = 1
         const far = 2000
 
         this.camera = new THREE.PerspectiveCamera(fov, this.aspect, near, far)
@@ -81,12 +129,16 @@ export default class Sketch {
     }
 
     render() {
-        this.time += 0.01
+        const delta = this.clock.getDelta()
         this.renderer.render(this.scene, this.camera)
 
         for(const object of this.objects) {
             if(typeof object.update == "function") {
                 object.update(this)
+            }
+
+            if(object.mixer) {
+                object.mixer.update(delta)
             }
         }
 

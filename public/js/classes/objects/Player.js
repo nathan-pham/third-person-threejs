@@ -1,13 +1,17 @@
-import {FBXLoader} from "http://esm.sh/three/examples/jsm/loaders/FBXLoader.js"
 import * as THREE from "https://esm.sh/three"
 
 export default class Player {
-    constructor() {
-        this.object = this.createPlayer()
+    constructor(asset) {
+        this.object = this.createPlayer(asset)
     }
 
-    createPlayer() {
-        const loader = new THREE.FBXLoader()
+    createPlayer(asset) {
+        this.mixer = asset.mixer
+        this.root = asset.mixer.getRoot()
         
+        const action = this.mixer.clipAction(asset.animations[0])
+        action.play()
+
+        return asset
     }
 }
