@@ -9,7 +9,7 @@ import Player from "./classes/objects/Player.js"
 
 import * as utils from "./utils.js"
 
-const socket = io()
+// const socket = io()
 
 const sketch = new Sketch({
     container: "#webgl__container", 

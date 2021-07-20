@@ -187,10 +187,6 @@ export default class Sketch {
         for(const key in this.cameras) {
             this.cameras[key].parent = this.player.object
         }
-
-        // this.player = new THREE.Group()
-        // this.player.add(player.object)
-        // this.add(player)
     }
 
     render() {
@@ -214,30 +210,14 @@ export default class Sketch {
             this.camera.lookAt(position)
         }
 
-        // this.player.object.position.z += 10
         if(this.controls.state[0] > 0) {
             const speed = this.player.currentAnimation == "running" ? 400 : 150
             this.player.object.translateZ(this.delta * speed)
-        } else {
+        } else if(this.controls.state[0] < 0) {
             this.player.object.translateZ(-this.delta * 30)
         }
         this.player.object.rotateY(this.controls.state[1] * -this.delta)            
-
-        
-        
-        // else if(this.currentAnimation == "walking_backwards" {
-        //     this.player.object.translateZ(this.delta * )
-
-        // }
         this.player.object.updateMatrix()
-
-        // // if(forward > 0.3) {
-        // //     const speed = this.currentAnimation == "running" ? 400 : 150
-        // //     this.object.translateZ(sketch.delta * speed)
-        // // } else if(forward < -0.3) {
-        // //     this.object.translateZ(-sketch.delta * 30)
-        // // }
-        // // this.object.rotateY(turn * sketch.delta)
 
         window.requestAnimationFrame(this.render.bind(this))
     }
