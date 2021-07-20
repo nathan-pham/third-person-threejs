@@ -16,8 +16,16 @@ const sketch = new Sketch({
     controls: "joystick",
     
     preload: [
-        utils.prefixFBX("people/FireFighter", "anims/Walking"),
-        utils.prefixPNG("SimplePeople_FireFighter_Black")
+        utils.prefixFBX(
+            "people/FireFighter", 
+            "anims/Walking Backwards", 
+            "anims/Walking", 
+            "anims/Running",
+            "anims/Turn"
+        ),
+        utils.prefixPNG(
+            "SimplePeople_FireFighter_Black"
+        )
     ],
     onLoad: (assets) => {
         sketch.add(new Player(assets))

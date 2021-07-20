@@ -16,7 +16,7 @@ export default class Joystick {
     }
 
     get touch() {
-        return "ontouchstart" in window || navigator.msMaxTouchPoints
+        return "ontouchstart" in window
     }
 
     mouseDown(e) {
@@ -44,7 +44,6 @@ export default class Joystick {
             box-sizing: border-box;
             background: rgba(126, 126, 126, 0.5);
             border-radius: 50%;
-            cursor: pointer;
         `
         const thumb = document.createElement("div")
         thumb.style.cssText = `
@@ -52,6 +51,7 @@ export default class Joystick {
             width: 2.5rem;
             background: #000;
             border-radius: 50%;
+            cursor: pointer;
         `
 
         shell.appendChild(thumb)
