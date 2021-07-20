@@ -112,9 +112,9 @@ export default class Sketch {
 
     createCameras() {
         const createObject = (...args) => {
-            const object = new THREE.Object3D()
-            object.position.set(...args)
-            return object
+            const _object = new THREE.Object3D()
+            _object.position.set(...args)
+            return _object
         }
 
         const front = createObject(112, 100, 600)

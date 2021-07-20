@@ -57,18 +57,6 @@ export default class Player {
         return asset
     }
 
-    /*
-    movePlayer(dt){	
-        if (this.player.move.forward>0){
-            const speed = (this.player.action=='Running') ? 400 : 150;
-            this.player.object.translateZ(dt*speed);
-        }else{
-            this.player.object.translateZ(-dt*30);
-        }
-        this.player.object.rotateY(this.player.move.turn*dt);
-	}
-    */
-
     update(sketch) {
         let [forward, turn] = sketch.controls.state
         turn *= -1
@@ -79,7 +67,7 @@ export default class Player {
             if(elapsed > 1000) {
                 this.action = "running"
             }
-        } else if(forward > 0.3 && this.currentAnimation !== "running") {
+        } else if(forward > 0.3) {
             this.action = "walking"
         } else if(forward < -0.3) {
             this.action = "walking_backwards"
@@ -89,9 +77,15 @@ export default class Player {
             this.action = "idle"
         }
 
-        // running animation
-        
-
+        // move player according to animations
+        // console.log(this.object.position.z)
+        // if(forward > 0.3) {
+        //     const speed = this.currentAnimation == "running" ? 400 : 150
+        //     this.object.translateZ(sketch.delta * speed)
+        // } else if(forward < -0.3) {
+        //     this.object.translateZ(-sketch.delta * 30)
+        // }
+        // this.object.rotateY(turn * sketch.delta)
 
         // manage camera
         if(sketch.activeCamera) {
