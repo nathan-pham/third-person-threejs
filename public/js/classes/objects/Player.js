@@ -54,7 +54,10 @@ export default class Player {
             })
         }
 
-        return asset
+        const group = new THREE.Group()
+        group.add(asset)
+
+        return group
     }
 
     // update(sketch) {

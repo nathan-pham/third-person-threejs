@@ -21,7 +21,9 @@ export default class Sketch {
         this.createRenderer()
 
         if(controls) {
-            this.createControls(controls)
+            controls.split(',').forEach(control => {
+                this.createControls(control.toLowerCase().trim())
+            }) 
         }
 
         this.loadAssets(preload.flat(Infinity), onLoad)
@@ -146,48 +148,25 @@ export default class Sketch {
                 this.controls = new Joystick({
                     container: this.container,
                     onMove: (state) => {
-                        if(!this.player) { return }
+                        if(this.player) {
+                            let [forward, turn] = state
+                            turn *= -1
 
-                        let [forward, turn] = state
-                        turn *= -1
-
-                        if(forward == 0) {
-                            this.player.action = "idle"
-                        } else if(Math.abs(turn) > 0.1) {
-                            this.player.action = "turn"
-                        } else if ((this.player.currentAnimation == "walking" )
-                            && forward > 0) {
-                            const elapsed = Date.now() - this.player.animationTime
-                            if(elapsed > 1000) {
-                                this.player.action = "running"
+                            if(forward == 0) {
+                                this.player.action = "idle"
+                            } else if (this.player.currentAnimation == "walking" && forward > 0) {
+                                const elapsed = Math.abs(Date.now() - this.player.animationTime)
+                                if(elapsed > 1000) {
+                                    this.player.action = "running"
+                                }
+                            } else if(forward > 0.3 && this.player.currentAnimation !== "running") {
+                                this.player.action = "walking"
+                            } else if(forward < 0.3) {
+                                this.player.action = "walking_backwards"
+                            } else if(Math.abs(turn) > 0.2 && this.player.currentAnimation == "idle") {
+                                this.player.action = "turn"
                             }
-                        } else if(forward > 0.3 && this.player.currentAnimation !== "running") {
-                            this.player.action = "walking"
-                        } else if(forward < 0.3) {
-                            this.player.action = "walking_backwards"
                         }
-        //     this.action = "turn"
-        // } else {
-        //     this.action = "idle"
-        // }
-
-        // // move player according to animations
-        // // console.log(this.object.position.z)
-        // // if(forward > 0.3) {
-        // //     const speed = this.currentAnimation == "running" ? 400 : 150
-        // //     this.object.translateZ(sketch.delta * speed)
-        // // } else if(forward < -0.3) {
-        // //     this.object.translateZ(-sketch.delta * 30)
-        // // }
-        // // this.object.rotateY(turn * sketch.delta)
-
-        // // manage camera
-        // if(sketch.activeCamera) {
-        //     sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
-        //     const position = this.object.position.clone()
-        //     position.y += 200
-        //     sketch.camera.lookAt(position)
-        // }
                     }
                 })
                 break
@@ -199,6 +178,19 @@ export default class Sketch {
                 this.controls.update()
                 break
         }
+    }
+
+    setPlayer(player) {
+        this.player = player
+        this.add(player)
+
+        for(const key in this.cameras) {
+            this.cameras[key].parent = this.player.object
+        }
+
+        // this.player = new THREE.Group()
+        // this.player.add(player.object)
+        // this.add(player)
     }
 
     render() {
@@ -214,6 +206,38 @@ export default class Sketch {
                 object.mixer.update(this.delta)
             }
         }
+
+        if(this.activeCamera && this.player) {
+            this.camera.position.lerp(this.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
+            const position = this.player.object.position.clone()
+            position.y += 200
+            this.camera.lookAt(position)
+        }
+
+        // this.player.object.position.z += 10
+        if(this.controls.state[0] > 0) {
+            const speed = this.player.currentAnimation == "running" ? 400 : 150
+            this.player.object.translateZ(this.delta * speed)
+        } else {
+            this.player.object.translateZ(-this.delta * 30)
+        }
+        this.player.object.rotateY(this.controls.state[1] * -this.delta)            
+
+        
+        
+        // else if(this.currentAnimation == "walking_backwards" {
+        //     this.player.object.translateZ(this.delta * )
+
+        // }
+        this.player.object.updateMatrix()
+
+        // // if(forward > 0.3) {
+        // //     const speed = this.currentAnimation == "running" ? 400 : 150
+        // //     this.object.translateZ(sketch.delta * speed)
+        // // } else if(forward < -0.3) {
+        // //     this.object.translateZ(-sketch.delta * 30)
+        // // }
+        // // this.object.rotateY(turn * sketch.delta)
 
         window.requestAnimationFrame(this.render.bind(this))
     }

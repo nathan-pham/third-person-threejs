@@ -6,7 +6,7 @@ export default class Grid {
     }
 
     createGrid() {
-        const grid = new THREE.GridHelper(2000, 40, 0x000000, 0x000000)
+        const grid = new THREE.GridHelper(5000, 40, 0x000000, 0x000000)
         grid.material.opacity = 0.2
         grid.material.transparent = true
 

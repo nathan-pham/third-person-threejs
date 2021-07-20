@@ -6,7 +6,7 @@ export default class Floor {
     }
 
     createFloor() {
-        this.geometry = new THREE.PlaneBufferGeometry(2000, 2000)
+        this.geometry = new THREE.PlaneBufferGeometry(10000, 10000)
         this.material = new THREE.MeshPhongMaterial({color: 0x999999, depthWrite: false})
 
         const floor = new THREE.Mesh(this.geometry, this.material)
