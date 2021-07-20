@@ -6,7 +6,7 @@ import Cube from "./classes/objects/Cube.js"
 
 const socket = io()
 
-const sketch = new Sketch({container: "#webgl__container", controls: true})
+const sketch = new Sketch({container: "#webgl__container", controls: "orbit"})
 
 sketch.add(
     new DirectionalLight(),

@@ -14,7 +14,7 @@ export default class Sketch {
         this.createRenderer()
 
         if(controls) {
-            this.createControls()
+            this.createControls(controls)
         }
 
         window.addEventListener("resize", this.resize.bind(this))
@@ -65,10 +65,16 @@ export default class Sketch {
         this.container.appendChild(this.renderer.domElement)
     }
     
-    createControls() {
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-        this.controls.target.set(0, 0, 0)
-        this.controls.update()
+    createControls(controls) {
+        switch(controls) {
+            case "orbit":
+            default: 
+                this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+                this.controls.target.set(0, 0, 0)
+                this.controls.update()
+                break
+        }
+        
     }
 
     render() {
