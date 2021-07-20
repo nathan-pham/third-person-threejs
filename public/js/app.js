@@ -2,6 +2,7 @@ import Sketch from "./classes/Sketch.js"
 
 import DirectionalLight from "./classes/objects/lights/DirectionalLight.js"
 import AmbientLight from "./classes/objects/lights/AmbientLight.js"
+import Player from "./classes/objects/Player.js"
 import Cube from "./classes/objects/Cube.js"
 
 const socket = io()

@@ -4,6 +4,7 @@ import {OrbitControls} from "https://esm.sh/three/examples/jsm/controls/OrbitCon
 export default class Sketch {
     time = 0
     objects = []
+    clock = new THREE.Clock()
 
     constructor({container=document.body, controls}={}) {
         this.container = typeof container == "string" ? document.querySelector(container) : container
@@ -45,12 +46,12 @@ export default class Sketch {
     }
 
     createCamera() {
-        const fov = 75
-        const near = 1
-        const far = 1000
+        const fov = 45
+        const near = 45
+        const far = 2000
 
         this.camera = new THREE.PerspectiveCamera(fov, this.aspect, near, far)
-        this.camera.position.z = 5 // set(75, 20, 0)
+        this.camera.position.set(112, 100, 400)
     }
     
     createRenderer() {
