@@ -9,6 +9,7 @@ export default class Player {
             idle: asset.animations[0], 
             turn: assets["Turn.fbx"].animations[0],
             walking: assets["Walking.fbx"].animations[0],
+            running: assets["Running.fbx"].animations[0],
             walking_backwards: assets["Walking Backwards.fbx"].animations[0]
         }
 
@@ -35,20 +36,6 @@ export default class Player {
                 .setEffectiveWeight(1)
                 .fadeIn(0.2)
                 .play()
-
-            /*
-
-					previousAction.fadeOut( duration );
-
-				activeAction
-					.reset()
-					.setEffectiveTimeScale( 1 )
-					.setEffectiveWeight( 1 )
-					.fadeIn( duration )
-					.play();
-
-            
-            */
         }
     }
 
@@ -69,10 +56,10 @@ export default class Player {
         return asset
     }
 
-    update({controls: {state}}) {
-        let [forward, turn] = state
+    update(sketch) {
+        // manage animations
+        let [forward, turn] = sketch.controls.state
         turn *= -1
-        // console.log(forward, turn)
         if(forward > 0.3) {
             this.action = "walking"
         } else if(forward < -0.3) {
@@ -81,6 +68,14 @@ export default class Player {
             this.action = "turn"
         } else {
             this.action = "idle"
+        }
+
+        // manage camera
+        if(sketch.activeCamera) {
+            sketch.camera.position.lerp(sketch.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
+            const position = this.object.position.clone()
+            position. y += 200
+            sketch.camera.lookAt(position)
         }
     }
 }

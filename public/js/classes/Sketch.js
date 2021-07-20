@@ -15,6 +15,7 @@ export default class Sketch {
 
         this.createScene()
         this.createCamera()
+        this.createCameras()
         this.createRenderer()
 
         if(controls) {
@@ -76,10 +77,6 @@ export default class Sketch {
         })
     }
 
-    get aspect() {
-        return this.dimensions.width / this.dimensions.height
-    }
-
     add(...objects) {
         for(const object of objects) {
             this.objects.push(object)
@@ -99,16 +96,34 @@ export default class Sketch {
     createScene() {
         this.scene = new THREE.Scene()
         this.scene.background = new THREE.Color(0xa0a0a0)
-        this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000)
+        this.scene.fog = new THREE.Fog(0xa0a0a0, 700, 4000)
+        // this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000)
     }
 
     createCamera() {
         const fov = 45
         const near = 1
-        const far = 2000
+        const far = 5000
 
         this.camera = new THREE.PerspectiveCamera(fov, this.aspect, near, far)
-        this.camera.position.set(112, 100, 400)
+        this.camera.position.set(0, 120, 500)
+    }
+
+    createCameras() {
+        const createObject = (...args) => {
+            const object = new THREE.Object3D()
+            object.position.set(...args)
+            return object
+        }
+
+        const front = createObject(112, 100, 600)
+        const back = createObject(0, 300, -600)
+        const wide = createObject(178, 139, 1665)
+        const overhead = createObject(0, 400, 0)
+        const collect = createObject(40, 82, 94)
+
+        this.cameras = {front, back, wide, overhead, collect}
+        this.activeCamera = this.cameras.back
     }
     
     createRenderer() {
@@ -136,7 +151,6 @@ export default class Sketch {
                 this.controls.update()
                 break
         }
-        
     }
 
     render() {
@@ -154,5 +168,9 @@ export default class Sketch {
         }
 
         window.requestAnimationFrame(this.render.bind(this))
+    }
+
+    get aspect() {
+        return this.dimensions.width / this.dimensions.height
     }
 }
