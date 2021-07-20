@@ -13,7 +13,7 @@ const socket = io()
 
 const sketch = new Sketch({
     container: "#webgl__container", 
-    controls: "orbit",
+    controls: "joystick",
     
     preload: [
         utils.prefixFBX("people/FireFighter", "anims/Walking"),

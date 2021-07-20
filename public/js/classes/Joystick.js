@@ -8,6 +8,7 @@ export default class Joystick {
 
 		this.origin = {left: this.thumb.offsetLeft, top: this.thumb.offsetTop}
         this.offset = {x: 0, y: 0}
+        this.state = [0, 0]
 
         this.touch
             ? this.thumb.addEventListener("touchstart", this.mouseDown.bind(this))
@@ -29,6 +30,7 @@ export default class Joystick {
         const shell = document.createElement("div")
         shell.style.cssText = `
             backdrop-filter: blur(2px);
+            z-index: 100;
             user-select: none;
             position: fixed;
             bottom: 1.5rem;
@@ -78,9 +80,10 @@ export default class Joystick {
         }
 
         this.thumb.style.transform = `translate(${left}px, ${top}px)`
-        const forward = -(top - this.origin.top + this.thumb.clientHeight/2)/this.radius;
-		const turn = (left - this.origin.left + this.thumb.clientWidth/2)/this.radius;
-		this.onMove([forward, turn])
+        const forward = -(top - this.origin.top + this.thumb.clientHeight / 2) / this.radius
+		const turn = (left - this.origin.left + this.thumb.clientWidth / 2) / this.radius
+        this.state = [forward, turn]
+		this.onMove(this.state)
 	}
 
     tap(e) {
@@ -117,6 +120,8 @@ export default class Joystick {
         }
         
         this.thumb.style.transform = ""
-        this.onMove([0, 0])
+
+        this.state = [0, 0]
+        this.onMove(this.state)
     }    
 }

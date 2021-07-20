@@ -2,6 +2,8 @@ import {OrbitControls} from "https://esm.sh/three/examples/jsm/controls/OrbitCon
 import {FBXLoader} from "http://esm.sh/three/examples/jsm/loaders/FBXLoader.js"
 import * as THREE from "https://esm.sh/three"
 
+import Joystick from "./Joystick.js"
+
 export default class Sketch {
     assets = {}
     objects = []
@@ -123,6 +125,10 @@ export default class Sketch {
     
     createControls(controls) {
         switch(controls) {
+            case "joystick":
+                this.controls = new Joystick({container: this.container})
+                break
+
             case "orbit":
             default: 
                 this.controls = new OrbitControls(this.camera, this.renderer.domElement)
