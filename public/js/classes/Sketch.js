@@ -50,7 +50,7 @@ export default class Sketch {
         const far = 1000
 
         this.camera = new THREE.PerspectiveCamera(fov, this.aspect, near, far)
-        this.camera
+        this.camera.position.z = 5 // set(75, 20, 0)
     }
     
     createRenderer() {
@@ -76,7 +76,9 @@ export default class Sketch {
         this.renderer.render(this.scene, this.camera)
 
         for(const object of this.objects) {
-            object?.update(this)
+            if(typeof object.update == "function") {
+                object.update(this)
+            }
         }
 
         window.requestAnimationFrame(this.render.bind(this))
