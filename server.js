@@ -9,8 +9,22 @@ const io = new Server(server)
 
 const port = 8080
 
+app.use(require("./render"))
+app.use(express.static("public"))
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
-    res.send("Hello World")
+    res.render("index.html")
+})
+
+io.on("connection", (socket) => {
+    console.log("a user connected")
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected")
+    })
 })
 
 server.listen(port, () => {
