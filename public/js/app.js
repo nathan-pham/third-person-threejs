@@ -2,11 +2,11 @@ import Sketch from "./classes/Sketch.js"
 
 import DirectionalLight from "./classes/objects/lights/DirectionalLight.js"
 import HemisphereLight from "./classes/objects/lights/HemisphereLight.js"
-import AmbientLight from "./classes/objects/lights/AmbientLight.js"
+import Collider from "./classes/objects/colliders/Collider.js"
+import Stage from "./classes/objects/colliders/Stage.js"
 import Floor from "./classes/objects/floor/Floor.js"
 import Grid from "./classes/objects/floor/Grid.js"
 import Player from "./classes/objects/Player.js"
-
 import * as utils from "./utils.js"
 
 // const socket = io()
@@ -30,15 +30,19 @@ const sketch = new Sketch({
     onLoad: (assets) => {
         sketch.setPlayer(new Player(assets))
         sketch.render()
-        // sketch.add(new Player(assets))
-        // sketch.render()
     }
 })
 
 sketch.add(
     new DirectionalLight(),
     new HemisphereLight(),
-    // new AmbientLight(),
     new Floor(),
     new Grid()
 )
+
+for(let x = -5000; x < 5000; x += 1000) {
+    for(let z = -5000; z < 5000; z += 1000) {
+        if(x == 0 && z == 0) { continue }
+        sketch.add(new Collider([x, 250, z]))
+    }
+}
