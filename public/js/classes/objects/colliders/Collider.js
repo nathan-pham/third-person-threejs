@@ -1,6 +1,8 @@
 import * as CANNON from "https://esm.sh/cannon"
 import * as THREE from "https://esm.sh/three"
 
+import {randomColor} from "/js/utils.js"
+
 export default class Collider {
     type = "collider"
     
@@ -11,7 +13,7 @@ export default class Collider {
 
     createCollider(position) {
         this.geometry = new THREE.BoxGeometry(500, 500, 500)
-        this.material = new THREE.MeshBasicMaterial({color: 0x222222, wireframe: true})
+        this.material = new THREE.MeshBasicMaterial({color: randomColor(), wireframe: false})
 
         const mesh = new THREE.Mesh(this.geometry, this.material)
         mesh.position.set(...position)

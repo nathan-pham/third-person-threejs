@@ -9,7 +9,7 @@ import Grid from "./classes/objects/floor/Grid.js"
 import Player from "./classes/objects/player/Player.js"
 import PlayerBounds from "./classes/objects/player/PlayerBounds.js"
 import Town from "./classes/objects/Town.js"
-import * as utils from "./utils.js"
+import * as utils from "/js/utils.js"
 
 // const socket = io()
 
@@ -45,7 +45,7 @@ sketch.add(
     new DirectionalLight(),
     new HemisphereLight(),
     new Floor(),
-    new Grid()
+    // new Grid()
 )
 
 for(let x = -5000; x < 5000; x += 1000) {

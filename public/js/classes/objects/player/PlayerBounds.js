@@ -3,7 +3,7 @@ import * as THREE from "https://esm.sh/three"
 
 export default class PlayerBounds {
     constructor() {
-        this.object = this.createBounds(true)
+        this.object = this.createBounds()
         this.cannon = this.addPhysics()
         this.jump = true
     }

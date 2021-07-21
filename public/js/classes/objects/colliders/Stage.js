@@ -11,7 +11,7 @@ export default class Stage {
 
     createStage(position) {
         this.geometry = new THREE.BoxGeometry(1000, 40, 1000)
-        this.material = new THREE.MeshBasicMaterial({color: 0x222222, wireframe: true})
+        this.material = new THREE.MeshBasicMaterial({color: 0x222222, wireframe: false})
 
         const mesh = new THREE.Mesh(this.geometry, this.material)
         mesh.position.set(...position)
