@@ -8,6 +8,7 @@ import Floor from "./classes/objects/floor/Floor.js"
 import Grid from "./classes/objects/floor/Grid.js"
 import Player from "./classes/objects/player/Player.js"
 import PlayerBounds from "./classes/objects/player/PlayerBounds.js"
+import Town from "./classes/objects/Town.js"
 import * as utils from "./utils.js"
 
 // const socket = io()
