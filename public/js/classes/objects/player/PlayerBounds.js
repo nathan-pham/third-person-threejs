@@ -5,6 +5,7 @@ export default class PlayerBounds {
     constructor() {
         this.object = this.createBounds(true)
         this.cannon = this.addPhysics()
+        this.jump = true
     }
 
     createBounds(wireframe) {
@@ -27,7 +28,24 @@ export default class PlayerBounds {
         })
         cube.position.copy(this.object.position)
         cube.angularDamping = 0.99
-        cube.linearDamping = 0.99
+        // cube.linearDamping = 0.99
+
+        const contactNormal = new CANNON.Vec3()
+
+        cube.addEventListener("collide", e => {
+            const contact = e.contact
+
+            if (contact.bi.id == cube.id) {
+                contact.ni.negate(contactNormal)
+            } else {
+                contactNormal.copy(contact.ni)
+            }
+
+            if(contactNormal.dot(new CANNON.Vec3(0, 1, 0)) > 0.5) {
+                this.jump = true
+                this.player.action = "idle"
+            }
+        })
 
         // cube.velocity.mult(0)
         cube.angularVelocity.mult(0)

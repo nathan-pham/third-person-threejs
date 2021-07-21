@@ -160,12 +160,21 @@ export default class Sketch {
             case "joystick":
                 this.controls = new Joystick({
                     container: this.container,
+                    onJump: () => {
+                        if(this.player.bounds.jump) {
+                            this.player.bounds.jump = false
+                            this.player.bounds.cannon.velocity.y = 300
+                            this.player.action = "jump"
+                        }
+                    },
                     onMove: (state) => {
                         if(this.player) {
                             let [forward, turn] = state
                             turn *= -1
 
-                            if(forward == 0) {
+                            if(this.player.currentAnimation == "jump") { return }
+
+                            if(forward == 0 && this.player.bounds.jump) {
                                 this.player.action = "idle"
                             } else if (this.player.currentAnimation == "walking" && forward > 0) {
                                 const elapsed = Math.abs(Date.now() - this.player.animationTime)

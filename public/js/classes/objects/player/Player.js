@@ -49,6 +49,10 @@ export default class Player {
         this.mixer = asset.mixer
         this.root = asset.mixer.getRoot()
 
+        this.mixer.addEventListener("finished", (e) => {
+            console.log("ok")
+        })
+
         this.action = "idle"
 
         if(skin) {

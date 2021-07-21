@@ -1,7 +1,8 @@
 export default class Joystick {
-    constructor({container=document.body, onMove}={}) {
+    constructor({container=document.body, onMove, onJump}={}) {
         this.container = container
         this.onMove = onMove || (() => {})
+        this.onJump = onJump || (() => {})
 
         this.radius = 40
         this.thumb = this.createThumb()
@@ -9,6 +10,8 @@ export default class Joystick {
 		this.origin = {left: this.thumb.offsetLeft, top: this.thumb.offsetTop}
         this.offset = {x: 0, y: 0}
         this.state = [0, 0]
+
+        document.addEventListener("keydown", this.jump.bind(this))
 
         this.touch
             ? this.thumb.addEventListener("touchstart", this.mouseDown.bind(this))
@@ -65,6 +68,12 @@ export default class Joystick {
             y: e.targetTouches ? e.targetTouches[0].pageY : e.clientY
         }
 	}
+
+    jump(e) {
+        if(e.key == " ") {
+            this.onJump()
+        }
+    }
 
 	move(e){
         const mouse = this.mouse(e)

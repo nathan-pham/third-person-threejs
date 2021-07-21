@@ -33,6 +33,7 @@ const sketch = new Sketch({
         const player = new Player(assets)
 
         player.bounds = bounds
+        bounds.player = player
 
         sketch.setPlayer(player)
         sketch.add(bounds)
