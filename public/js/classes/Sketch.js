@@ -56,7 +56,7 @@ export default class Sketch {
                                 child.receiveShadow = false
                                 child.castShadow = true
     
-                                child.material.map = null
+                                // child.material.map = null
                             }
                         })
                     }
@@ -176,9 +176,18 @@ export default class Sketch {
                                 this.player.action = "walking"
                             } else if(forward < 0.3) {
                                 this.player.action = "walking_backwards"
-                            } else if(Math.abs(turn) > 0.2 && this.player.currentAnimation == "idle") {
-                                this.player.action = "turn"
-                            }
+                            } 
+                            
+                            // else if(this.player.currentAnimation == "idle" | this.player.currentAnimation.includes("turn")) {
+                            //     if(turn > 0.2) {
+                            //         this.player.action = "turn_right"
+                            //     } else if(turn < -0.2) {
+                            //         this.player.action = "turn_left"
+                            //     }
+                            // }
+                            // else if(Math.abs(turn) > 0.2 && this.player.currentAnimation == "idle") {
+                            //     // this.player.action = "turn"
+                            // }
                         }
                     }
                 })

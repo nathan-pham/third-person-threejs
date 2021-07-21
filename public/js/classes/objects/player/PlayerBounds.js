@@ -8,7 +8,7 @@ export default class PlayerBounds {
     }
 
     createBounds(wireframe) {
-        this.geometry = new THREE.BoxGeometry(100, 300, 100)
+        this.geometry = new THREE.BoxGeometry(50, 175, 50)
         this.material = wireframe
             ? new THREE.MeshBasicMaterial({color: 0x222222, wireframe:true})
             : new THREE.MeshBasicMaterial({color: 0x222222, opacity: 0, transparent: true})

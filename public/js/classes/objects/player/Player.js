@@ -1,19 +1,24 @@
 import * as THREE from "https://esm.sh/three"
 
+
 export default class Player {
     constructor(assets) {
-        const asset = assets["FireFighter.fbx"]
-        const skin = assets["SimplePeople_FireFighter_Black.png"]
+        const asset = assets["xbot_idle.fbx"]
 
-        this.animations = {
-            idle: asset.animations[0], 
-            turn: assets["Turn.fbx"].animations[0],
-            walking: assets["Walking.fbx"].animations[0],
-            running: assets["Running.fbx"].animations[0],
-            walking_backwards: assets["Walking Backwards.fbx"].animations[0]
+        const a = (name) => {
+            try {
+                return assets[name + ".fbx"].animations[0]
+            } catch(e) {
+                return null
+            }
         }
+        
+        this.animations = ["running", "walking", "walking_backwards", "jump"].reduce((acc, cur) => ({
+            ...acc,
+            [cur]: a(cur)
+        }), {idle: asset.animations[0]})
 
-        this.object = this.createPlayer(asset, skin)
+        this.object = this.createPlayer(asset)
     }
 
     set action(name="idle") {

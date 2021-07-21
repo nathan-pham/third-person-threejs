@@ -19,14 +19,13 @@ const sketch = new Sketch({
     
     preload: [
         utils.prefixFBX(
-            "people/FireFighter", 
-            "anims/Walking Backwards", 
-            "anims/Walking", 
-            "anims/Running",
-            "anims/Turn"
-        ),
-        utils.prefixPNG(
-            "SimplePeople_FireFighter_Black"
+            "people/xbot_idle", 
+            "anims/jump",
+            "anims/running", 
+            "anims/walking", 
+            "anims/walking_backwards",
+            // "anims/turn_left",
+            // "anims/turn_right"
         )
     ],
     onLoad: (assets) => {
