@@ -1,11 +1,12 @@
 import {OrbitControls} from "https://esm.sh/three/examples/jsm/controls/OrbitControls"
 import {FBXLoader} from "http://esm.sh/three/examples/jsm/loaders/FBXLoader.js"
+import * as CANNON from "https://esm.sh/cannon"
 import * as THREE from "https://esm.sh/three"
 
 import Joystick from "./Joystick.js"
-import Player from "./objects/Player.js"
 
 export default class Sketch {
+    step = 1 / 60
     delta = 0
     assets = {}
     objects = []
@@ -15,6 +16,7 @@ export default class Sketch {
         this.container = typeof container == "string" ? document.querySelector(container) : container
         this.dimensions = {width: this.container.offsetWidth, height: this.container.offsetHeight}
 
+        this.createWorld()
         this.createScene()
         this.createCamera()
         this.createCameras()
@@ -85,6 +87,9 @@ export default class Sketch {
         for(const object of objects) {
             this.objects.push(object)
             this.scene.add(object.object || object)
+            if(object.cannon) {
+                this.world.addBody(object.cannon)
+            }
         }
     }
     
@@ -95,6 +100,12 @@ export default class Sketch {
         this.camera.updateProjectionMatrix()
 
         this.renderer.setSize(this.dimensions.width, this.dimensions.height)
+    }
+
+    createWorld() {
+        this.world = new CANNON.World()
+        // * 100
+        this.world.gravity.set(0, -9.87 * 50, 0)
     }
 
     createScene() {
@@ -141,8 +152,10 @@ export default class Sketch {
 
         this.container.appendChild(this.renderer.domElement)
     }
-    
+
     createControls(controls) {
+        this.controlType = controls
+
         switch(controls) {
             case "joystick":
                 this.controls = new Joystick({
@@ -191,6 +204,7 @@ export default class Sketch {
 
     render() {
         this.delta = this.clock.getDelta()
+        this.world.step(this.step, this.delta)
         this.renderer.render(this.scene, this.camera)
 
         for(const object of this.objects) {
@@ -203,21 +217,12 @@ export default class Sketch {
             }
         }
 
-        if(this.activeCamera && this.player) {
+        if(this.activeCamera && this.player && this.controlType == "joystick") {
             this.camera.position.lerp(this.activeCamera.getWorldPosition(new THREE.Vector3()), 0.05)
             const position = this.player.object.position.clone()
             position.y += 200
             this.camera.lookAt(position)
         }
-
-        if(this.controls.state[0] > 0) {
-            const speed = this.player.currentAnimation == "running" ? 400 : 150
-            this.player.object.translateZ(this.delta * speed)
-        } else if(this.controls.state[0] < 0) {
-            this.player.object.translateZ(-this.delta * 30)
-        }
-        this.player.object.rotateY(this.controls.state[1] * -this.delta)            
-        this.player.object.updateMatrix()
 
         window.requestAnimationFrame(this.render.bind(this))
     }

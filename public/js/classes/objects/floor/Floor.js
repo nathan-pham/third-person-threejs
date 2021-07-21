@@ -1,3 +1,4 @@
+import * as CANNON from "https://esm.sh/cannon"
 import * as THREE from "https://esm.sh/three"
 
 export default class Floor {
@@ -5,6 +6,7 @@ export default class Floor {
 
     constructor() {
         this.object = this.createFloor()
+        this.cannon = this.addPhysics()
     }
 
     createFloor() {
@@ -16,5 +18,15 @@ export default class Floor {
         floor.receiveShadow = true
 
         return floor
+    }
+
+    addPhysics() {
+        const plane = new CANNON.Body({
+            mass: 0,
+            shape: new CANNON.Plane()
+        })
+        plane.quaternion.setFromEuler(-Math.PI / 2, 0, 0) 
+        
+        return plane
     }
 }

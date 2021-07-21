@@ -6,7 +6,8 @@ import Collider from "./classes/objects/colliders/Collider.js"
 import Stage from "./classes/objects/colliders/Stage.js"
 import Floor from "./classes/objects/floor/Floor.js"
 import Grid from "./classes/objects/floor/Grid.js"
-import Player from "./classes/objects/Player.js"
+import Player from "./classes/objects/player/Player.js"
+import PlayerBounds from "./classes/objects/player/PlayerBounds.js"
 import * as utils from "./utils.js"
 
 // const socket = io()
@@ -28,7 +29,13 @@ const sketch = new Sketch({
         )
     ],
     onLoad: (assets) => {
-        sketch.setPlayer(new Player(assets))
+        const bounds = new PlayerBounds()
+        const player = new Player(assets)
+
+        player.bounds = bounds
+
+        sketch.setPlayer(player)
+        sketch.add(bounds)
         sketch.render()
     }
 })
@@ -43,6 +50,7 @@ sketch.add(
 for(let x = -5000; x < 5000; x += 1000) {
     for(let z = -5000; z < 5000; z += 1000) {
         if(x == 0 && z == 0) { continue }
+        // sketch.add(new Collider([x, 500, z]))
         sketch.add(new Collider([x, 250, z]))
     }
 }
