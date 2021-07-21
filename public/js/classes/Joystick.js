@@ -37,9 +37,9 @@ export default class Joystick {
             }
 
             if(this.keys.includes("a")) {
-                turn = -0.3
+                turn = -0.99
             } else if(this.keys.includes("d")) {
-                turn = 0.3
+                turn = 0.99
             }
         }
 

@@ -71,10 +71,13 @@ export default class PlayerBounds {
         } 
 
 
+        // if(!(Math.abs(turn) <= 0.3)) {
+        //     turn /= 5
+        // }
+
         const speed = player.currentAnimation == "running" ? 400 : 150
         const z = speed * delta * (forward > 0 ? 1 : forward < 0 ? -1/3 : 0)
-
-        this.cannon.angularVelocity.set(0, -turn * delta * 2000, 0)
+        this.cannon.angularVelocity.set(0, -turn * delta * 500, 0)
         const relative = new CANNON.Vec3(0, 0, z)
         this.cannon.quaternion.vmult(relative, relative)
         this.cannon.position.vadd(relative, this.cannon.position)
