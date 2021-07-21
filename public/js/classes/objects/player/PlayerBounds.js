@@ -28,7 +28,7 @@ export default class PlayerBounds {
         })
         cube.position.copy(this.object.position)
         cube.angularDamping = 0.99
-        // cube.linearDamping = 0.99
+        cube.linearDamping = 0.99
 
         const contactNormal = new CANNON.Vec3()
 

@@ -163,7 +163,7 @@ export default class Sketch {
                     onJump: () => {
                         if(this.player.bounds.jump) {
                             this.player.bounds.jump = false
-                            this.player.bounds.cannon.velocity.y = 300
+                            this.player.bounds.cannon.velocity.y = 500
                             this.player.action = "jump"
                         }
                     },
