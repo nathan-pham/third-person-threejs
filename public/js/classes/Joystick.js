@@ -4,6 +4,7 @@ export default class Joystick {
         this.onMove = onMove || (() => {})
         this.onJump = onJump || (() => {})
 
+        this.keys = []
         this.radius = 40
         this.thumb = this.createThumb()
 
@@ -13,6 +14,9 @@ export default class Joystick {
 
         document.addEventListener("keydown", this.jump.bind(this))
 
+        document.addEventListener("keypress", this.keyPress.bind(this))
+        document.addEventListener("keyup", this.keyUp.bind(this))
+
         this.touch
             ? this.thumb.addEventListener("touchstart", this.mouseDown.bind(this))
             : this.thumb.addEventListener("mousedown", this.mouseDown.bind(this))
@@ -20,6 +24,39 @@ export default class Joystick {
 
     get touch() {
         return "ontouchstart" in window
+    }
+
+    keyState() {
+        let forward = 0
+        let turn = 0
+        if(this.keys.length > 0) {
+            if(this.keys.includes("w")) {
+                forward = 1
+            } else if(this.keys.includes("s")) {
+                forward = -1
+            }
+
+            if(this.keys.includes("a")) {
+                turn = -0.3
+            } else if(this.keys.includes("d")) {
+                turn = 0.3
+            }
+        }
+
+        this.state = [forward, turn]
+        return this.state
+    }
+
+    keyPress(e) {
+        if(this.keys.indexOf(e.key) == -1) {
+            this.keys.push(e.key)
+        }
+        this.onMove(this.keyState())
+    }
+
+    keyUp(e) {
+        this.keys.splice(this.keys.indexOf(e.key), 1)
+        this.onMove(this.keyState())
     }
 
     mouseDown(e) {

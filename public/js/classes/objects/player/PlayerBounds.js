@@ -53,11 +53,28 @@ export default class PlayerBounds {
     }
 
     update({player, controls, delta}) {
-        const [forward, turn] = controls.state
+        let [forward, turn] = controls.state
+
+        if(!(this.player.currentAnimation == "jump" && !this.jump)) { 
+            if(forward == 0 && this.jump) {
+                this.player.action = "idle"
+            } else if (this.player.currentAnimation == "walking" && forward > 0) {
+                const elapsed = Math.abs(Date.now() - this.player.animationTime)
+                if(elapsed > 1000) {
+                    this.player.action = "running"
+                }
+            } else if(forward > 0.3 && this.player.currentAnimation !== "running") {
+                this.player.action = "walking"
+            } else if(forward < 0.3) {
+                this.player.action = "walking_backwards"
+            }
+        } 
+
+
         const speed = player.currentAnimation == "running" ? 400 : 150
         const z = speed * delta * (forward > 0 ? 1 : forward < 0 ? -1/3 : 0)
 
-        this.cannon.angularVelocity.set(0, -turn * delta * 400, 0)
+        this.cannon.angularVelocity.set(0, -turn * delta * 2000, 0)
         const relative = new CANNON.Vec3(0, 0, z)
         this.cannon.quaternion.vmult(relative, relative)
         this.cannon.position.vadd(relative, this.cannon.position)

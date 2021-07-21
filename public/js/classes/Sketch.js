@@ -167,38 +167,14 @@ export default class Sketch {
                             this.player.action = "jump"
                         }
                     },
-                    onMove: (state) => {
-                        if(this.player) {
-                            let [forward, turn] = state
-                            turn *= -1
+                    // onMove: (state) => {
+                    //     if(this.player) {
+                    //         let [forward] = state
+                    //         // turn *= -1
 
-                            if(this.player.currentAnimation == "jump") { return }
-
-                            if(forward == 0 && this.player.bounds.jump) {
-                                this.player.action = "idle"
-                            } else if (this.player.currentAnimation == "walking" && forward > 0) {
-                                const elapsed = Math.abs(Date.now() - this.player.animationTime)
-                                if(elapsed > 1000) {
-                                    this.player.action = "running"
-                                }
-                            } else if(forward > 0.3 && this.player.currentAnimation !== "running") {
-                                this.player.action = "walking"
-                            } else if(forward < 0.3) {
-                                this.player.action = "walking_backwards"
-                            } 
-                            
-                            // else if(this.player.currentAnimation == "idle" | this.player.currentAnimation.includes("turn")) {
-                            //     if(turn > 0.2) {
-                            //         this.player.action = "turn_right"
-                            //     } else if(turn < -0.2) {
-                            //         this.player.action = "turn_left"
-                            //     }
-                            // }
-                            // else if(Math.abs(turn) > 0.2 && this.player.currentAnimation == "idle") {
-                            //     // this.player.action = "turn"
-                            // }
-                        }
-                    }
+                           
+                    //     }
+                    // }
                 })
                 break
 
