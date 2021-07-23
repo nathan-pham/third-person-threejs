@@ -23,7 +23,7 @@ export default class Stage {
 
         const cube = new CANNON.Body({
             mass: 200,
-            shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2)),
+            shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2))
         })
         cube.position.copy(this.object.position)
         

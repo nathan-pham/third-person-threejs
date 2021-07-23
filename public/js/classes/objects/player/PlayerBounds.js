@@ -5,7 +5,23 @@ export default class PlayerBounds {
     constructor() {
         this.object = this.createBounds()
         this.cannon = this.addPhysics()
-        this.jump = true
+        this.jump = false
+
+        this.addEventListeners()
+    }
+
+    get spawnHeight() {
+        return (this.geometry.parameters.height / 2) + 100
+    }
+
+    addEventListeners() {
+        document.addEventListener("keypress", e => {
+            if(e.key == "r") {
+                this.cannon.position.set(0, this.spawnHeight, 0)
+                this.object.position.copy(this.cannon.position)
+                this.player.object.position.copy(this.object.position)
+            }
+        })
     }
 
     createBounds(wireframe) {
@@ -13,9 +29,9 @@ export default class PlayerBounds {
         this.material = wireframe
             ? new THREE.MeshBasicMaterial({color: 0x222222, wireframe:true})
             : new THREE.MeshBasicMaterial({color: 0x222222, opacity: 0, transparent: true})
-        //  
-        const bounds = new THREE.Mesh(this.geometry, this.material)
-        bounds.position.y = (this.geometry.parameters.height / 2) + 100
+
+            const bounds = new THREE.Mesh(this.geometry, this.material)
+        bounds.position.y = this.spawnHeight
         return bounds
     }
 
@@ -27,8 +43,6 @@ export default class PlayerBounds {
             shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2)),
         })
         cube.position.copy(this.object.position)
-        cube.angularDamping = 0.99
-        cube.linearDamping = 0.99
 
         const contactNormal = new CANNON.Vec3()
 
@@ -43,12 +57,10 @@ export default class PlayerBounds {
 
             if(contactNormal.dot(new CANNON.Vec3(0, 1, 0)) > 0.5) {
                 this.jump = true
-                this.player.action = "idle"
+                // this.player.action = "idle"
             }
         })
 
-        // cube.velocity.mult(0)
-        cube.angularVelocity.mult(0)
         return cube
     }
 
@@ -70,17 +82,17 @@ export default class PlayerBounds {
             }
         } 
 
-
-        // if(!(Math.abs(turn) <= 0.3)) {
-        //     turn /= 5
-        // }
-
         const speed = player.currentAnimation == "running" ? 400 : 150
-        const z = speed * delta * (forward > 0 ? 1 : forward < 0 ? -1/3 : 0)
-        this.cannon.angularVelocity.set(0, -turn * delta * 500, 0)
-        const relative = new CANNON.Vec3(0, 0, z)
-        this.cannon.quaternion.vmult(relative, relative)
-        this.cannon.position.vadd(relative, this.cannon.position)
+        const z = speed * (forward > 0 ? 1 : forward < 0 ? -1/3 : 0)
+
+        const angle = Math.PI / 2 * delta * turn * -1
+        const rotation = new CANNON.Quaternion()
+        rotation.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), angle)
+        this.cannon.quaternion = rotation.mult(this.cannon.quaternion)
+
+        this.object.translateZ(z * delta)
+        this.cannon.position.x = this.object.position.x // - this.cannon.position.x
+        this.cannon.position.z = this.object.position.z // - this.cannon.position.z
 
         this.object.position.copy(this.cannon.position)
         this.object.quaternion.copy(this.cannon.quaternion)

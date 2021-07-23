@@ -104,8 +104,7 @@ export default class Sketch {
 
     createWorld() {
         this.world = new CANNON.World()
-        // * 100
-        this.world.gravity.set(0, -9.87 * 50, 0)
+        this.world.gravity.set(0, -9.87 * 20, 0)
     }
 
     createScene() {
@@ -163,7 +162,7 @@ export default class Sketch {
                     onJump: () => {
                         if(this.player.bounds.jump) {
                             this.player.bounds.jump = false
-                            this.player.bounds.cannon.velocity.y = 500
+                            this.player.bounds.cannon.velocity.y = 150
                             this.player.action = "jump"
                         }
                     },
