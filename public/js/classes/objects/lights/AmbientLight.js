@@ -6,6 +6,6 @@ export default class AmbientLight {
     }
 
     createLight() {
-        return new THREE.AmbientLight(0x707070)
+        return new THREE.AmbientLight(0x707070, 0.5)
     }
 }

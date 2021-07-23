@@ -11,13 +11,13 @@ export default class PlayerBounds {
     }
 
     get spawnHeight() {
-        return (this.geometry.parameters.height / 2) + 100
+        return (this.geometry.parameters.radius)
     }
 
     addEventListeners() {
         document.addEventListener("keypress", e => {
             if(e.key == "r") {
-                this.cannon.position.set(0, this.spawnHeight, 0)
+                this.cannon.position.set(0, this.spawnHeight + 200, 0)
                 this.object.position.copy(this.cannon.position)
                 this.player.object.position.copy(this.object.position)
             }
@@ -25,22 +25,25 @@ export default class PlayerBounds {
     }
 
     createBounds(wireframe) {
-        this.geometry = new THREE.BoxGeometry(50, 175, 50)
+        this.geometry = new THREE.SphereGeometry(175 / 2, 50, 50) //.BoxGeometry(50, 175, 50)
         this.material = wireframe
             ? new THREE.MeshBasicMaterial({color: 0x222222, wireframe:true})
             : new THREE.MeshBasicMaterial({color: 0x222222, opacity: 0, transparent: true})
 
             const bounds = new THREE.Mesh(this.geometry, this.material)
-        bounds.position.y = this.spawnHeight
+        bounds.position.y = this.spawnHeight + 200
         return bounds
     }
 
     addPhysics() {
-        const {width, height, depth} = this.geometry.parameters
+        // const {width, height, depth} = this.geometry.parameters
 
         const cube = new CANNON.Body({
             mass: 75,
-            shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2)),
+            linearDamping: 0.5,
+            angularDamping: 1.0,
+            shape: new CANNON.Sphere(175 / 2) // new CANNON.Sphere(Math.max(width / 2, height / 2, depth / 2))
+            // new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2))
         })
         cube.position.copy(this.object.position)
 
@@ -90,9 +93,14 @@ export default class PlayerBounds {
         rotation.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), angle)
         this.cannon.quaternion = rotation.mult(this.cannon.quaternion)
 
-        this.object.translateZ(z * delta)
-        this.cannon.position.x = this.object.position.x // - this.cannon.position.x
-        this.cannon.position.z = this.object.position.z // - this.cannon.position.z
+        // this.object.translateZ(z * delta)
+        // this.cannon.position.x = this.object.position.x // - this.cannon.position.x
+        // this.cannon.position.z = this.object.position.z // - this.cannon.position.z
+        const local = new CANNON.Vec3(0, 0, z)
+        const world = this.cannon.quaternion.vmult(local)
+
+        this.cannon.velocity.x = world.x
+        this.cannon.velocity.z = world.z
 
         this.object.position.copy(this.cannon.position)
         this.object.quaternion.copy(this.cannon.quaternion)

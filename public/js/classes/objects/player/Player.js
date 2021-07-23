@@ -67,7 +67,7 @@ export default class Player {
 
     update() {
         this.object.position.copy(this.bounds.object.position)
-        this.object.position.y -= this.bounds.geometry.parameters.height / 2
+        this.object.position.y -= this.bounds.spawnHeight
         this.object.rotation.copy(this.bounds.object.rotation)
     }
 }

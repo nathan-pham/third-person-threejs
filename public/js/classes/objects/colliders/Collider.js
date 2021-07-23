@@ -17,6 +17,9 @@ export default class Collider {
 
         const mesh = new THREE.Mesh(this.geometry, this.material)
         mesh.position.set(...position)
+        // mesh.receiveShadow = true
+        // mesh.castShadow = true
+        
         return mesh
     }
 
